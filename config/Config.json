@@ -1,0 +1,13 @@
+{
+	"db": {
+		"name": "blvckish",
+		"user": "delex",
+		"password": "#L~jxJM[aTu68<79W@_@4'",
+		"secret": "9GwmZTDAbjNRmPG8!92IMHjpGqGBnQT6W8U3$9eSGC$ZKaZ!jx62qJ&hpx$k2n!b"
+	},
+	"app": {
+		"name": "NodeProject",
+		"version": "1.0.0",
+		"port": 3000
+	}
+}

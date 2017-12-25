@@ -1,11 +1,17 @@
 var express = require('express');
 var http = require('http');
 var config = require('./config/Config');
+var ejs = require('ejs');
+var path = require('path');
 const app = express();
 
 
 var port = normalizePort(config.app.port || '8080');
 app.set('port', 3000);
+app.use(express.static(path.join(__dirname, 'public')))
+    .set('views', path.join(__dirname, 'views'))
+    .set('view engine', 'ejs'),
+    app.engine('html', require('ejs').renderFile);
 
 
 var server = http.createServer(app);
@@ -17,9 +23,10 @@ server.listen(port, function () {
 server.on('error', onError);
 server.on('listening', onListening);
 
-app.get('/', function(req,res){
-    res.send("Hello")
+app.get('/', function (req, res) {
+    res.render('./pages/index.html')
 })
+//.get('/', (req, res) => res.render('pages/index'))
 function normalizePort(val) {
     var port = parseInt(val, 10);
     if (isNaN(port)) {

@@ -17,7 +17,9 @@ server.listen(port, function () {
 server.on('error', onError);
 server.on('listening', onListening);
 
-
+app.get('/', function(req,res){
+    res.send("Hello")
+})
 function normalizePort(val) {
     var port = parseInt(val, 10);
     if (isNaN(port)) {

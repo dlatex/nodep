@@ -3,7 +3,8 @@ module.exports	=	{
 	db: {
 		name: Config.db.name,
 		user: Config.db.user,
-		pwd: Config.db.password
+		pwd: Config.db.password,
+		secret : Config.db.secret
 	},
 	app: {
 		name: Config.app.name,

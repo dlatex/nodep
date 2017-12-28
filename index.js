@@ -12,7 +12,8 @@ let passport = require('./config/passport')
 let api = require('./routes/api');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/nodep', { useMongoClient: true });
+//mongoose.connect('mongodb://localhost/nodep', { useMongoClient: true });
+mongoose.connect('mongodb://devlex:' + config.db.pwd + '@cluster0-shard-00-00-q7lgs.mongodb.net:27017,cluster0-shard-00-01-q7lgs.mongodb.net:27017,cluster0-shard-00-02-q7lgs.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin', { useMongoClient: true });
 let databases = mongoose.connection;
 databases.on('error', console.error.bind(console, 'connection error:'));
 databases.once('open', function () {
@@ -24,13 +25,13 @@ app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: false }));
 
 app.use(express.static(path.join(__dirname, 'public')))
-    .set('views', path.join(__dirname, 'views'))
+    .set('views', path.join(__dirname, 'public'))
     .set('view engine', 'ejs'),
     app.engine('html', require('ejs').renderFile);
 app.use(passport.initialize());
 app.use(passport.session());
 
-var port = normalizePort(config.app.port || '8080');
+var port = normalizePort(config.app.port || '3000');
 app.set('port', 3000);
 var server = http.createServer(app);
 var debug = require('debug')('server:server');
@@ -43,8 +44,8 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 app.use('/api', api);
-app.get('/', function (req, res) {
-    res.render('./pages/index.html')
+app.get('*', function (req, res) {
+    res.render('index.html')
 })
 
 
@@ -59,7 +60,11 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
     // render the error page
     res.status(err.status || 500);
-    console.log(err);
+    res.json({
+        error: {
+            "message": err.message
+        }
+    })
 });
 function normalizePort(val) {
     var port = parseInt(val, 10);

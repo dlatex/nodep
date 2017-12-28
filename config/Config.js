@@ -9,6 +9,6 @@ module.exports	=	{
 	app: {
 		name: Config.app.name,
 		version: Config.app.version,
-		port: Config.app.port
+		port: process.env.PORT
 	}
 };

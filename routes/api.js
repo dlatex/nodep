@@ -7,6 +7,7 @@ let config = require('../config/Config');
 let passport = require('../config/passport');
 var jwt = require('jsonwebtoken');
 let db = mongojs('mongodb://' + config.db.user + ":" + config.db.pwd + '@ds135956.mlab.com:35956/nodep');
+let Serie = require('../models/Serie');
 
 //var upload = multer({ dest: 'uploads/' });
 //uploads le fichier dans lequel ils sont stockés les images 
@@ -53,5 +54,63 @@ Router.route('/profile').post(upload.single('userAvatar'), function (req, res, n
     res.send({
         message: "Hello"
     })
+})
+
+
+/**
+ * Series
+ */
+Router.route('/series/add').post(function (req, res) {
+    var data = req.body;
+    /*
+    const anneeProd = req.body.prod;
+    const name = req.body.name;
+    const categorie = req.body.categorie;
+    const note = req.body.note;*/
+    Serie.create(data, function (err, serie) {
+        if (err) return res.status(400).json({
+            message: err.message
+        });
+        else {
+            return res.status(200).json({
+                status: true,
+                error: null,
+                message: "Serie add successfully",
+                serie: serie
+            })
+        }
+    })
+})
+Router.route('/series/:id').get(function (req, res) {
+    Serie.find({ _id: req.params.id })
+        .select('nom categorie')
+        .exec()
+        .then(serie => {
+            res.status(200).json({
+                status: true,
+                serie: serie
+            })
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: err.message
+            })
+        })
+})
+Router.route('/series').get(function (req, res) {
+    Serie.find()
+        .select('')
+        .exec()
+        .then(series => {
+            res.status(200).json({
+                status: true,
+                series: series
+            })
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: err.message
+            })
+        })
 })
 module.exports = Router;
